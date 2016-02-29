@@ -1,37 +1,25 @@
 <dashboard>
-  <label>Business overview</label>
+  <label>User_Activity</label>
   <row>
     <panel>
-      <single>
-        <title>Total amount</title>
+      <table>
+        <title>IP per user</title>
         <search>
-          <query>index = s4rbusiness sourcetype = paydata | transaction startswith="message received" endswith="stop tmp" | timechart span=15m sum(TMP_Amount)</query>
-          <earliest>0</earliest>
+          <query>index=* sourcetype=cilasoft user_name!=*NONE | stats values(remote_IP) by user_name</query>
+          <earliest></earliest>
           <latest></latest>
         </search>
-        <option name="afterLabel">$</option>
-        <option name="colorBy">trend</option>
-        <option name="colorMode">none</option>
-        <option name="numberPrecision">0</option>
-        <option name="rangeColors">["0x65a637","0x6db7c6","0xf7bc38","0xf58f39","0xd93f3c"]</option>
-        <option name="rangeValues">[0,30,70,100]</option>
-        <option name="showSparkline">1</option>
-        <option name="showTrendIndicator">1</option>
-        <option name="trendColorInterpretation">standard</option>
-        <option name="trendDisplayMode">absolute</option>
-        <option name="trendInterval">auto</option>
-        <option name="underLabel">Amount compared to last 15 min. period</option>
-        <option name="useColors">1</option>
-        <option name="useThousandSeparators">1</option>
-      </single>
+      </table>
     </panel>
   </row>
   <row>
     <panel>
       <chart>
-        <title>Transaction predictions</title>
+        <title>User with more than 1 IP</title>
         <search>
-          <query>index = s4rbusiness sourcetype = paydata | transaction startswith="message received" endswith="stop tmp" | timechart span=15m sum(TMP_Amount) as sum | streamstats global=f sum(sum) as "Transactions cumulées" | predict "Transactions cumulées"  as "Prédiction"| eval Objectif=50000 | rename sum as "Volume horaire"</query>
+          <query>index=* sourcetype=cilasoft user_name!=*NONE | stats dc(remote_IP) as count by user_name|where count&gt;1|sort 10 - count</query>
+          <earliest></earliest>
+          <latest></latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -42,12 +30,11 @@
         <option name="charting.axisY.scale">linear</option>
         <option name="charting.axisY2.enabled">0</option>
         <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">column</option>
+        <option name="charting.chart">bar</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
         <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.overlayFields">prediction(cumul),Objectif</option>
         <option name="charting.chart.showDataLabels">none</option>
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
@@ -57,18 +44,17 @@
         <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.placement">right</option>
-        <option name="charting.axisTitleY.text">Amount in $</option>
-        <option name="charting.axisTitleX.text">Temps</option>
       </chart>
     </panel>
   </row>
   <row>
     <panel>
       <map>
-        <title>Volume Geo distribution</title>
+        <title>remote_connexion</title>
         <search>
-          <query>index = s4rbusiness sourcetype = paydata | transaction startswith="message received" endswith="stop tmp" | search localisation-x=* AND localisation-y=* | geostats sum(TMP_Amount) as Volume latfield=localisation-x longfield=localisation-y</query>
-          <earliest>0</earliest>
+          <query>sourcetype=cilasoft   | rex mode=sed "s/remote_IP=::/remote_IP=/"|geostats count by user_name</query>
+          <earliest></earliest>
+          <latest></latest>
         </search>
         <option name="mapping.choroplethLayer.colorBins">5</option>
         <option name="mapping.choroplethLayer.colorMode">auto</option>
@@ -79,9 +65,9 @@
         <option name="mapping.choroplethLayer.showBorder">1</option>
         <option name="mapping.data.maxClusters">100</option>
         <option name="mapping.drilldown">all</option>
-        <option name="mapping.map.center">(46.5,4.72)</option>
-        <option name="mapping.map.panning">true</option>
-        <option name="mapping.map.scrollZoom">false</option>
+        <option name="mapping.map.center">(46.8,9.82)</option>
+        <option name="mapping.map.panning">1</option>
+        <option name="mapping.map.scrollZoom">0</option>
         <option name="mapping.map.zoom">5</option>
         <option name="mapping.markerLayer.markerMaxSize">50</option>
         <option name="mapping.markerLayer.markerMinSize">10</option>
@@ -91,8 +77,43 @@
         <option name="mapping.tileLayer.minZoom">0</option>
         <option name="mapping.tileLayer.tileOpacity">1</option>
         <option name="mapping.type">marker</option>
-        <option name="drilldown">all</option>
       </map>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>event outside of business hour</title>
+        <search>
+          <query>sourcetype=cilasoft  (date_hour&gt;18 OR date_hour&lt;7) OR (date_wday=Sunday OR date_wday=Saturday)|stats count by user_name</query>
+          <earliest></earliest>
+          <latest></latest>
+        </search>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <single>
+        <title>logon outside business hour</title>
+        <search>
+          <query>sourcetype=cilasoft  (date_hour&gt;18 OR date_hour&lt;7) OR (date_wday=Sunday OR date_wday=Saturday)|stats count</query>
+          <earliest></earliest>
+          <latest></latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x65a637","0xf58f39","0xd93f3c"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="trendInterval">auto</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+      </single>
     </panel>
   </row>
 </dashboard>

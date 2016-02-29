@@ -28,3 +28,10 @@ export = none
 owner = admin
 version = 6.3.0
 modtime = 1456556862.343197000
+
+[views/User_Activity]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.3.0
+modtime = 1456758307.531800000
