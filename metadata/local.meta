@@ -1,0 +1,30 @@
+[props/cilasoft]
+owner = admin
+version = 6.3.0
+modtime = 1456554525.275415000
+
+[props/cilasoft/EXTRACT-Type_of_source]
+access = read : [ * ], write : [ admin ]
+owner = admin
+version = 6.3.0
+modtime = 1456554923.456628000
+
+[props/cilasoft/EXTRACT-Source_command]
+access = read : [ * ], write : [ admin ]
+owner = admin
+version = 6.3.0
+modtime = 1456555074.971231000
+
+[transforms/IP]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.3.0
+modtime = 1456556846.815546000
+
+[props/cilasoft/LOOKUP-iptolocation]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.3.0
+modtime = 1456556862.343197000

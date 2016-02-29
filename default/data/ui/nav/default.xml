@@ -1,0 +1,11 @@
+<nav search_view="search" color="#FF0000">
+	<view name="search" default="true" />
+	<collection label="Solutions">
+		<view name="business_overview" label="Business Overview"/>
+		<view name="security_overview" label="Security Overview"/>
+		<view name="transaction_overview" label="Transaction Overview"/>
+   </collection>
+    <a href="http://docs.splunk.com/Documentation/Splunk/6.2.0/SearchReference/Commandsbycategory" target="_blank">Splunk commands</a>
+    <a href="https://twitter.com/intent/tweet?text=Splunk%20rocks%20!&amp;hashtags=Splunk4Rookies" target="_blank">Tweet</a>
+
+</nav>
