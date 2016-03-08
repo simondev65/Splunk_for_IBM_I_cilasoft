@@ -34,4 +34,13 @@ access = read : [ * ], write : [ admin ]
 export = none
 owner = admin
 version = 6.3.0
-modtime = 1456758307.531800000
+modtime = 1457385805.076685000
+
+[views/demodashboard]
+owner = admin
+version = 6.3.0
+modtime = 1457386597.157432000
+
+[views/specificuser]
+version = 6.3.0
+modtime = 1457386840.467550000

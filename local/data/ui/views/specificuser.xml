@@ -1,0 +1,50 @@
+<form>
+  <label>Specific User</label>
+  <fieldset submitButton="false">
+    <input type="multiselect" token="user_name">
+      <label>user name</label>
+      <choice value="*">all</choice>
+      <search>
+        <query>sourcetype=cilasoft|dedup user_name</query>
+      </search>
+      <fieldForLabel>user_name</fieldForLabel>
+      <fieldForValue>user_name</fieldForValue>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <valuePrefix>user_name=</valuePrefix>
+      <delimiter>OR </delimiter>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>sourcetype=cilasoft  user_name=*|chart sparkline count by user_name</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <event>
+        <title>user_name</title>
+        <search>
+          <query>sourcetype=cilasoft  $user_name$</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="count">5</option>
+        <option name="list.drilldown">full</option>
+        <option name="list.wrap">1</option>
+        <option name="maxLines">5</option>
+        <option name="raw.drilldown">full</option>
+        <option name="rowNumbers">1</option>
+        <option name="table.drilldown">all</option>
+        <option name="table.wrap">1</option>
+        <option name="type">list</option>
+        <fields>[]</fields>
+      </event>
+    </panel>
+  </row>
+</form>

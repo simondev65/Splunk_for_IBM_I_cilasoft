@@ -1,8 +1,85 @@
-<dashboard>
+<form>
   <label>User_Activity</label>
+  <fieldset submitButton="false">
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>0</earliest>
+        <latest></latest>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
-      <table>
+      <single>
+        <search>
+          <query>sourcetype=cilasoft  (date_hour&gt;18 OR date_hour&lt;7) OR (date_wday=Sunday OR date_wday=Saturday)|stats count</query>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x65a637","0xf58f39","0xd93f3c"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="trendInterval">auto</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="linkView">search</option>
+        <drilldown>
+          <set token="hour">toto</set>
+          <unset token="user">toto</unset>
+        </drilldown>
+        <option name="underLabel">logon outside business hour</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search>
+          <query>index=* sourcetype=cilasoft user_name!=*NONE | stats dc(remote_IP) as count by user_name|where count&gt;1|stats count(user_name)</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x65a637","0xf58f39","0xd93f3c"]</option>
+        <option name="rangeValues">[0,2]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="trendInterval">auto</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="linkView">search</option>
+        <drilldown>
+          <unset token="hour">toto</unset>
+          <set token="user">toto</set>
+        </drilldown>
+        <option name="underLabel">user with 2+ IP</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table depends="$hour$">
+        <title>related names</title>
+        <search>
+          <query>sourcetype=cilasoft  (date_hour&gt;18 OR date_hour&lt;7) OR (date_wday=Sunday OR date_wday=Saturday)|stats count by user_name</query>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table depends="$user$">
         <title>IP per user</title>
         <search>
           <query>index=* sourcetype=cilasoft user_name!=*NONE | stats values(remote_IP) by user_name</query>
@@ -14,7 +91,7 @@
   </row>
   <row>
     <panel>
-      <chart>
+      <chart depends="$user$">
         <title>User with more than 1 IP</title>
         <search>
           <query>index=* sourcetype=cilasoft user_name!=*NONE | stats dc(remote_IP) as count by user_name|where count&gt;1|sort 10 - count</query>
@@ -80,40 +157,4 @@
       </map>
     </panel>
   </row>
-  <row>
-    <panel>
-      <table>
-        <title>event outside of business hour</title>
-        <search>
-          <query>sourcetype=cilasoft  (date_hour&gt;18 OR date_hour&lt;7) OR (date_wday=Sunday OR date_wday=Saturday)|stats count by user_name</query>
-          <earliest></earliest>
-          <latest></latest>
-        </search>
-      </table>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <single>
-        <title>logon outside business hour</title>
-        <search>
-          <query>sourcetype=cilasoft  (date_hour&gt;18 OR date_hour&lt;7) OR (date_wday=Sunday OR date_wday=Saturday)|stats count</query>
-          <earliest></earliest>
-          <latest></latest>
-        </search>
-        <option name="colorBy">value</option>
-        <option name="colorMode">block</option>
-        <option name="numberPrecision">0</option>
-        <option name="rangeColors">["0x65a637","0xf58f39","0xd93f3c"]</option>
-        <option name="rangeValues">[0,5]</option>
-        <option name="showSparkline">1</option>
-        <option name="showTrendIndicator">1</option>
-        <option name="trendColorInterpretation">standard</option>
-        <option name="trendDisplayMode">absolute</option>
-        <option name="trendInterval">auto</option>
-        <option name="useColors">1</option>
-        <option name="useThousandSeparators">1</option>
-      </single>
-    </panel>
-  </row>
-</dashboard>
+</form>

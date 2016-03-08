@@ -1,5 +1,6 @@
 <nav search_view="search" color="#FF0000">
 	<view name="User_Activity" default="true" />
+	<view name="specificuser" />
 	<view name="search"  />
 	<collection label="Solutions">
 		<view name="tobedone" />
