@@ -1,9 +1,15 @@
-<nav search_view="search" color="#FF0000">
-	<view name="User_Activity" default="true" />
-	<view name="specificuser" />
-	<view name="search"  />
-	<collection label="Solutions">
-		<view name="tobedone" />
+<nav search_view="search" color="#c14c4c">
+<view name="search"  />
+	<collection label="User Related">
+		<view name="User_Activity" default="true" />
+		<view name="specificuser" />
    </collection>
+   <collection label="Access">
+		<view name="critical_file_access"  />
+   </collection>
+	<view name="data_models" />
+  <view name="reports" />
+  <view name="alerts" />
+  <view name="dashboards" />
  
 </nav>

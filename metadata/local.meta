@@ -44,3 +44,24 @@ modtime = 1457386597.157432000
 [views/specificuser]
 version = 6.3.0
 modtime = 1457432529.202889000
+
+[views/critical_file_access]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.3.0
+modtime = 1457436443.870497000
+
+[datamodels/cilasoft]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.3.0
+modtime = 1457436913.270309000
+
+[models/cilasoft]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.3.0
+modtime = 1457436875.481052000
